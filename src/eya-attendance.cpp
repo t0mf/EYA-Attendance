@@ -138,7 +138,7 @@ bool CreateClassRollVector(const std::string& filePath, const std::vector<std::s
             //tmpPerson.percent = data[2];
 
             person::MemberType memberType{ person::MemberType::NA };
-            for (int i = 2; i < actualNumHeaders; ++i)
+            for (uint32_t i = 2; i < actualNumHeaders; ++i)
             {
                 person::AttendanceType attendanceType{ person::AttendanceType::NA };
 
@@ -190,7 +190,7 @@ bool CountAbsentWeeks(std::vector<person>& classRoll)
 {
     for (auto& member : classRoll)
     {
-        int WeeksAbsent{ 99 };
+        uint32_t WeeksAbsent{ 99 };
         for (auto& Attendance : member.attendance_list)
         {
             if (Attendance.type == person::AttendanceType::PRESENT ||
@@ -223,7 +223,7 @@ bool OutputDataToFile(const std::vector<std::string>& headers, const std::vector
     }
 
     // Output the headers
-    for (int i = 0; i < actualNumHeaders; ++i)
+    for (uint32_t i = 0; i < actualNumHeaders; ++i)
     {
         outFile << headers[i] << ",";
 
@@ -293,6 +293,8 @@ bool OutputDataToFile(const std::vector<std::string>& headers, const std::vector
     }
 
     outFile.close();
+
+    return true;
 }
 
 void PrintMessageAndWait(const std::string& msg)

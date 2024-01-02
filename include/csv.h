@@ -144,7 +144,7 @@ namespace io {
                 std::setvbuf(file, 0, _IONBF, 0);
             }
 
-            int read(char* buffer, int size) { return std::fread(buffer, 1, size, file); }
+            int read(char* buffer, int size) { return static_cast<int>(std::fread(buffer, 1, size, file)); }
 
             ~OwningStdIOByteSourceBase() { std::fclose(file); }
 
@@ -158,7 +158,7 @@ namespace io {
 
             int read(char* buffer, int size) {
                 in.read(buffer, size);
-                return in.gcount();
+                return static_cast<int>(in.gcount());
             }
 
             ~NonOwningIStreamByteSource() {}
@@ -175,7 +175,7 @@ namespace io {
             int read(char* buffer, int desired_byte_count) {
                 int to_copy_byte_count = desired_byte_count;
                 if (remaining_byte_count < to_copy_byte_count)
-                    to_copy_byte_count = remaining_byte_count;
+                    to_copy_byte_count = static_cast<int>(remaining_byte_count);
                 std::memcpy(buffer, str, to_copy_byte_count);
                 remaining_byte_count -= to_copy_byte_count;
                 str += to_copy_byte_count;

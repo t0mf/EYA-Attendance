@@ -25,7 +25,7 @@ public:
 		NOT_PRESENT,
 		VISITING,
 	};
-	typedef struct Attendance
+	struct Attendance
 	{
 		std::string date{};
 		AttendanceType type{ AttendanceType::NA };
