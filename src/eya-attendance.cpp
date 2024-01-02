@@ -145,7 +145,7 @@ bool CreateClassRollVector(const std::string& filePath, const std::vector<std::s
                 if (data[i] == "membership removed")
                 {
                     attendanceType = person::AttendanceType::NA;
-                    memberType = person::MemberType::NA;
+                    //memberType = person::MemberType::NA;
                 }
                 else if (data[i] == "attendance not taken")
                 {
@@ -204,6 +204,11 @@ bool CountAbsentWeeks(std::vector<person>& classRoll)
             {
                 if (member.seen)
                     WeeksAbsent++;
+            }
+            else if (Attendance.type == person::AttendanceType::NA)
+            {
+                member.seen = false;
+                WeeksAbsent = 99;
             }
             Attendance.weeks_absent = WeeksAbsent;
         }
