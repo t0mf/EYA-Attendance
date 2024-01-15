@@ -29,7 +29,7 @@ public:
 	{
 		std::string date{};
 		AttendanceType type{ AttendanceType::NA };
-		int weeks_absent{ 99 };
+		int32_t weeks_absent{ 99 };
 	};
 	std::vector<Attendance> attendance_list;
 
