@@ -244,6 +244,12 @@ bool CountAbsentWeeks(std::vector<person>& classRoll)
                 weeksAbsent = 99;
             }
             attendance.weeks_absent = weeksAbsent;
+
+            // If they get passed week 5 (visit) once, they've "been through the process" and we shouldn't try again
+            if (weeksAbsent > 5)
+            {
+                member.been_through_process = true;
+            }
         }
     }
     return true;
@@ -308,24 +314,28 @@ bool OutputDataToReportFile(const std::string& date, const std::vector<std::stri
 
         outFile << ",";
 
-        // Based on the LAST week's absent count output a special action
-        switch (member.attendance_list[member.attendance_list.size() - 1].weeks_absent)
+        // Only output to do something if the member has NOT been through the process (haven't made it to week 6 in the past)
+        if (!member.been_through_process)
         {
-        case 2:
-            outFile << "Text";
-            break;
-        case 3:
-            outFile << "Post Card";
-            break;
-        case 4:
-            outFile << "Phone Call";
-            break;
-        case 5:
-            outFile << "Visit";
-            break;
-        default:
-            outFile << "";
-        };
+            // Based on the LAST week's absent count output a special action
+            switch (member.attendance_list[member.attendance_list.size() - 1].weeks_absent)
+            {
+            case 2:
+                outFile << "Text";
+                break;
+            case 3:
+                outFile << "Post Card";
+                break;
+            case 4:
+                outFile << "Phone Call";
+                break;
+            case 5:
+                outFile << "Visit";
+                break;
+            default:
+                outFile << "";
+            };
+        }
 
         outFile << ",";
 
@@ -368,6 +378,10 @@ bool OutputDataToOutreachFile(const std::string& date, const std::vector<std::st
     // For each member
     for (auto& member : classRoll)
     {
+        // Only output to do something if the member has NOT been through the process (haven't made it to week 6 in the past)
+        if (member.been_through_process)
+            continue;
+
         int32_t weeksAbsent{ member.attendance_list[member.attendance_list.size() - 1].weeks_absent };
 
         // Only do weeks that are between 2 and 5

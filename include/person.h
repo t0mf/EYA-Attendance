@@ -8,6 +8,7 @@ public:
 	std::string first_name{};
 	std::string last_name{};
 	bool seen{ false };
+	bool been_through_process{ false };
 	enum class MemberType
 	{
 		NA,
