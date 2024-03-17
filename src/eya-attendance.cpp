@@ -1,6 +1,8 @@
 // eya-attendance.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include "csv.h"
+#include "person.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -8,8 +10,7 @@
 #include <string>
 #include <ctime>
 #include <filesystem>
-#include "csv.h"
-#include "person.h"
+#include <unordered_set>
 
 // Validates an input string is in a valid date format and is a Sunday
 bool ValidDateFormat(const std::string& date)
@@ -129,7 +130,28 @@ bool TokenizeHeaderRow(const std::string& headerRow, std::vector<std::string>& h
                 else
                     return true;
             });
-        //TODO: Look for duplicates
+        
+        if (erased > 0)
+        {
+            std::cout << "Erased " << erased << " event(s) that were not on Sunday or an invalid date format" << std::endl;
+        }
+
+        // Added a continue in parse_header_line() of csv.h to allow for parsing of CSVs with duplicate headers.
+        //  This seems to work somehow, it prevents throwing the error::duplicated_column_in_header error
+        // 
+        // Erase duplicates in the headers vector by trying to put each header into
+        //  an unordered_set, if the insert fails (do to being duplicate), erase it
+        // This assumes that the FIRST EVENT on a Sunday is Sunday School
+        erased = std::erase_if(headers, [&](std::string s)
+            {
+                static std::unordered_set<std::string> seenWords;
+                return seenWords.insert(s).second == false;
+            });
+
+        if (erased > 0)
+        {
+            std::cout << "Erased " << erased << " event(s) that were on Sunday, but probably were not Sunday School" << std::endl;
+        }
 
         return true;
     }

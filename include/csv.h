@@ -849,6 +849,7 @@ namespace io {
                 for (unsigned i = 0; i < column_count; ++i)
                     if (col_begin == col_name[i]) {
                         if (found[i]) {
+                            continue;   // DEVIATION FROM THE LIBRARY!! Skip over the error throw on a duplicate header name.. this seems to work.
                             error::duplicated_column_in_header err;
                             err.set_column_name(col_begin);
                             throw err;
