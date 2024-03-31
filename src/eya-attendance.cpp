@@ -267,8 +267,8 @@ bool CountAbsentWeeks(std::vector<person>& classRoll)
             }
             attendance.weeks_absent = weeksAbsent;
 
-            // If they get passed week 5 (visit) once, they've "been through the process" and we shouldn't try again
-            if (weeksAbsent > 5)
+            // If they get past week 5 (visit) once, they've "been through the process" and we shouldn't try again
+            if (member.seen && weeksAbsent > 5)
             {
                 member.been_through_process = true;
             }
